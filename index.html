@@ -93,6 +93,7 @@
       background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px;
     }
     .card + .card { margin-top: 16px; }
+    .grid > .card + .card { margin-top: 0; }
     .card h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 14px; font-weight: 600; }
     .card h3 { font-size: 1rem; margin: 18px 0 8px; }
 
@@ -181,52 +182,58 @@
 
     <!-- RESISTANCES -->
     <section class="view" id="view-resist">
-      <p class="intro">How much magic damage your resistance stops, how often full hits still land, and what spell hit or penetration is worth when you cast at something else.</p>
+      <p class="intro">How much magic damage resistance stops and how often full hits still land. Below that: your own spells against a target's resistance, and what spell hit and penetration are worth.</p>
+
       <div class="grid">
-        <div>
-          <div class="card">
-            <h2>Scenario</h2>
-            <div class="presets">
-              <button class="btn" data-preset="bvp">Boss hits you</button>
-              <button class="btn" data-preset="pvb">You hit boss</button>
-              <button class="btn" data-preset="pvp">PvP</button>
-            </div>
-            <div class="fields">
-              <label class="f">Attacker level<input type="number" id="r-alvl" min="1" max="63" value="63"></label>
-              <label class="f">Target level<input type="number" id="r-tlvl" min="1" max="63" value="60"></label>
-              <label class="f">Target resistance<input type="number" id="r-res" min="0" max="999" value="200"></label>
-              <label class="f">Spell penetration<input type="number" id="r-pen" min="0" max="999" value="0"></label>
-              <label class="f">Target health<input type="number" id="r-hp" min="1" max="99999" value="8000"></label>
-              <label class="f">Spell hit %<input type="number" id="r-hit" min="0" max="99" value="0"></label>
-              <label class="f full">Boss resistance preset
-                <select id="r-boss"><option value="">Choose a boss…</option></select>
-              </label>
-            </div>
-            <div class="checks" style="margin-top:14px">
-              <label class="c"><input type="checkbox" id="r-anpc" checked>Attacker is an NPC</label>
-              <label class="c"><input type="checkbox" id="r-tnpc">Target is an NPC</label>
-              <label class="c"><input type="checkbox" id="r-bin">Binary spell (has a non-damage effect, like Frostbolt or Fear)</label>
-            </div>
+        <div class="card">
+          <h2>Scenario</h2>
+          <div class="presets">
+            <button class="btn" data-preset="bvp">Boss hits you</button>
+            <button class="btn" data-preset="pvb">You hit boss</button>
+            <button class="btn" data-preset="pvp">PvP</button>
           </div>
-          <div class="card">
-            <h2>Your spell (for stat values)</h2>
-            <div class="fields">
-              <label class="f">Base damage<input type="number" id="r-base" min="0" value="510"></label>
-              <label class="f">Coefficient<input type="number" id="r-coef" min="0" step="0.01" value="0.86"></label>
-              <label class="f full">Spell power<input type="number" id="r-sp" min="0" value="500"></label>
-            </div>
+          <div class="fields">
+            <label class="f">Attacker level<input type="number" id="r-alvl" min="1" max="63" value="63"></label>
+            <label class="f">Target level<input type="number" id="r-tlvl" min="1" max="63" value="60"></label>
+            <label class="f">Target resistance<input type="number" id="r-res" min="0" max="999" value="200"></label>
+            <label class="f">Target health<input type="number" id="r-hp" min="1" max="99999" value="8000"></label>
+            <label class="f full">Boss resistance preset
+              <select id="r-boss"><option value="">Choose a boss…</option></select>
+            </label>
+          </div>
+          <div class="checks" style="margin-top:14px">
+            <label class="c"><input type="checkbox" id="r-anpc" checked>Attacker is an NPC</label>
+            <label class="c"><input type="checkbox" id="r-tnpc">Target is an NPC</label>
+            <label class="c"><input type="checkbox" id="r-bin">Binary spell (has a non-damage effect, like Frostbolt or Fear)</label>
           </div>
         </div>
-        <div>
-          <div class="card">
-            <h2>Results</h2>
-            <div class="stats" id="r-stats"></div>
-            <div class="rolltitle"><h3 id="r-tabletitle">Partial resists</h3><span class="note" id="r-tablenote"></span></div>
-            <div class="rollbar" id="r-bar"></div>
-            <div class="legend" id="r-legend"></div>
-            <h3>Average mitigation by resistance</h3>
-            <div id="r-chart"></div>
+        <div class="card">
+          <h2>Mitigation from resistance</h2>
+          <div class="stats" id="r-stats"></div>
+          <div class="rolltitle"><h3 id="r-tabletitle">Partial resists</h3><span class="note" id="r-tablenote"></span></div>
+          <div class="rollbar" id="r-bar"></div>
+          <div class="legend" id="r-legend"></div>
+          <h3>Average mitigation by resistance</h3>
+          <div id="r-chart"></div>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:16px">
+        <div class="card">
+          <h2>Your spell</h2>
+          <div class="fields">
+            <label class="f">Spell hit %<input type="number" id="r-hit" min="0" max="99" value="0"></label>
+            <label class="f">Spell penetration<input type="number" id="r-pen" min="0" max="999" value="0"></label>
+            <label class="f">Base damage<input type="number" id="r-base" min="0" value="510"></label>
+            <label class="f">Coefficient<input type="number" id="r-coef" min="0" step="0.01" value="0.86"></label>
+            <label class="f full">Spell power<input type="number" id="r-sp" min="0" value="500"></label>
           </div>
+          <p class="hint">Uses the scenario above. Spell penetration also lowers the target's resistance in the mitigation results.</p>
+        </div>
+        <div class="card">
+          <h2>Spell hit &amp; penetration</h2>
+          <div class="stats" id="r-spellstats"></div>
+          <p class="hint" id="r-spellnote"></p>
         </div>
       </div>
     </section>

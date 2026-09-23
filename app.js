@@ -149,13 +149,19 @@
       stat("Average mitigation", pct(st.avg * 100), true) +
       stat("Effective resistance", fmt(st.eff), false, "/ " + st.cap + " cap") +
       stat("Chance of a full hit", pct(fullHit, 1)) +
-      stat("Spell hit chance", pct(hitChance, 0), false, o.binary ? "incl. resist" : "hit cap " + hitCap + "%") +
-      stat("Total mitigation", pct(mitAll * 100), false, "resist + miss") +
       stat("Effective health", fmt(ehp)) +
       stat("+1 resistance", "+" + ((next - st.avg) * 100).toFixed(3) + "%") +
-      (st.levelRes ? stat("Level-based resistance", "+" + st.levelRes, false, "can't be removed") : "") +
+      (st.levelRes ? stat("Level-based resistance", "+" + st.levelRes, false, "can't be removed") : "");
+
+    $("r-spellstats").innerHTML =
+      stat("Spell hit chance", pct(hitChance, 0), true, o.binary ? "incl. resist" : "") +
+      stat("Hit cap", hitCap + "%", false, spHit > hitCap && !o.binary ? `${spHit - hitCap}% wasted` : "") +
+      stat("Total mitigation", pct(mitAll * 100), false, "resist + miss") +
       stat("1 spell pen worth", penVal.toFixed(2), false, "spell power") +
       stat("1% spell hit worth", hitVal.toFixed(1), false, "spell power");
+    $("r-spellnote").textContent = o.binary
+      ? "Binary spell: hit and resistance are one roll, so spell hit above the cap still helps against resistance."
+      : "Non-binary spell: spell hit only prevents full misses (up to the cap). Resistance is rolled separately.";
 
     if (o.binary) {
       const r = st.avg * 100;
