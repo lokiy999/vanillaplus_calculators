@@ -197,6 +197,8 @@
             <label class="f">Target level<input type="number" id="r-tlvl" min="1" max="63" value="60"></label>
             <label class="f">Target resistance<input type="number" id="r-res" min="0" max="999" value="200"></label>
             <label class="f">Target health<input type="number" id="r-hp" min="1" max="99999" value="8000"></label>
+            <label class="f">Spell hit %<input type="number" id="r-hit" min="0" max="99" value="0"></label>
+            <label class="f">Spell penetration<input type="number" id="r-pen" min="0" max="999" value="0"></label>
             <label class="f full">Boss resistance preset
               <select id="r-boss"><option value="">Choose a boss…</option></select>
             </label>
@@ -222,13 +224,11 @@
         <div class="card">
           <h2>Your spell</h2>
           <div class="fields">
-            <label class="f">Spell hit %<input type="number" id="r-hit" min="0" max="99" value="0"></label>
-            <label class="f">Spell penetration<input type="number" id="r-pen" min="0" max="999" value="0"></label>
             <label class="f">Base damage<input type="number" id="r-base" min="0" value="510"></label>
             <label class="f">Coefficient<input type="number" id="r-coef" min="0" step="0.01" value="0.86"></label>
             <label class="f full">Spell power<input type="number" id="r-sp" min="0" value="500"></label>
           </div>
-          <p class="hint">Uses the scenario above. Spell penetration also lowers the target's resistance in the mitigation results.</p>
+          <p class="hint">Uses the scenario above, including spell hit and spell penetration.</p>
         </div>
         <div class="card">
           <h2>Spell hit &amp; penetration</h2>
