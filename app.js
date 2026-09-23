@@ -72,6 +72,14 @@
   // =====================================================
   // RESISTANCES  (Royalgiraffe's resistance guide)
   // =====================================================
+  // Placeholders until the real Vanilla+ boss resistances are known.
+  const PLACEHOLDER_BOSSES = [
+    ["Placeholder boss A", { fire: 0 }],
+    ["Placeholder boss B", { frost: 100 }],
+    ["Placeholder boss C", { shadow: 200 }],
+    ["Placeholder boss D", { nature: 300 }],
+  ];
+
   const BOSSES = [
     ["Molten Core — Lucifron", { fire: 93, shadow: 186 }],
     ["Molten Core — Gehennas", { fire: 186, shadow: 93 }],
@@ -203,13 +211,18 @@
 
   function initResist() {
     const sel = $("r-boss");
-    BOSSES.forEach(([name, r]) => {
-      Object.keys(r).forEach((school) => {
-        const o = document.createElement("option");
-        o.value = r[school];
-        o.textContent = `${name}: ${r[school]} ${school}`;
-        sel.appendChild(o);
+    [["Vanilla+ bosses (placeholders)", PLACEHOLDER_BOSSES], ["Classic raid bosses", BOSSES]].forEach(([label, list]) => {
+      const group = document.createElement("optgroup");
+      group.label = label;
+      list.forEach(([name, r]) => {
+        Object.keys(r).forEach((school) => {
+          const o = document.createElement("option");
+          o.value = r[school];
+          o.textContent = `${name}: ${r[school]} ${school}`;
+          group.appendChild(o);
+        });
       });
+      sel.appendChild(group);
     });
     sel.addEventListener("change", () => {
       if (!sel.value) return;
