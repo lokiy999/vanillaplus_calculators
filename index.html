@@ -224,11 +224,12 @@
         <div class="card">
           <h2>Your spell</h2>
           <div class="fields">
+            <label class="f full">Spell<select id="r-spell"><option value="">Custom</option></select></label>
             <label class="f">Base damage<input type="number" id="r-base" min="0" value="510"></label>
             <label class="f">Coefficient<input type="number" id="r-coef" min="0" step="0.01" value="0.86"></label>
             <label class="f full">Spell power<input type="number" id="r-sp" min="0" value="500"></label>
           </div>
-          <p class="hint">Uses the scenario above, including spell hit and spell penetration.</p>
+          <p class="hint">Picking a spell fills in its base damage and coefficient, and sets the binary option above. Spell power stays yours. Changing a number switches back to Custom.</p>
         </div>
         <div class="card">
           <h2>Spell hit &amp; penetration</h2>
@@ -375,7 +376,7 @@
     </footer>
   </div>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script src="data.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

@@ -4,6 +4,13 @@
 // Adjust these where Vanilla+ differs.
 
 window.CALC_DATA = {
+  // Spells for the Resistances tab. binary: true = the spell has a non-damage effect
+  // (slow, fear, drain...), so it's fully hit or fully resisted.
+  resistSpells: [
+    { name: "Dummy spell", base: 100, coefficient: 1, binary: false },
+    { name: "Mind Flay", base: 900, coefficient: 0.30, binary: true },
+  ],
+
   // Mana regen per 2 sec tick from Spirit, per class.
   regen: {
     priest:  { base: 13, perSpirit: 1 / 4 },

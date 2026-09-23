@@ -233,6 +233,22 @@
     document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => {
       setScenario(b.dataset.preset); renderResist(); save();
     }));
+
+    const spellSel = $("r-spell");
+    (D.resistSpells || []).forEach((sp, i) => {
+      const o = document.createElement("option");
+      o.value = String(i);
+      o.textContent = `${sp.name} (${sp.base} base, ${sp.coefficient} coefficient${sp.binary ? ", binary" : ""})`;
+      spellSel.appendChild(o);
+    });
+    spellSel.addEventListener("change", () => {
+      const sp = D.resistSpells[spellSel.value];
+      if (!sp) return;
+      $("r-base").value = sp.base;
+      $("r-coef").value = sp.coefficient;
+      $("r-bin").checked = !!sp.binary;
+    });
+    ["r-base", "r-coef"].forEach((id) => $(id).addEventListener("input", () => { spellSel.value = ""; }));
   }
   function setScenario(p) {
     const set = { bvp: [63, 60, true, false], pvb: [60, 63, false, true], pvp: [60, 60, false, false] }[p];
