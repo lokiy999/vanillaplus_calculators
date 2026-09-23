@@ -87,7 +87,6 @@
     ["Molten Core — Sulfuron Harbinger", { fire: 93 }],
     ["Molten Core — Golemagg", { fire: 186 }],
     ["Molten Core — Flamewaker Elite (Majordomo)", { fire: 90 }],
-    ["Naxxramas — Kel'Thuzad", { frost: 200, shadow: 100 }],
   ];
 
   function resistStats(res, o) {
