@@ -384,19 +384,21 @@
       crit: Math.max(0, 5 - skillDiff * 0.04),
       crush: baseDefDiff >= 15 ? baseDefDiff * 2 - 15 : 0,
     };
-    const auto = fillTable(["miss", "dodge", "parry", "block", "crit", "crush"], ch);
+    // Vanilla+: the chance to be crit is only reduced by defense. Crit is rolled right after miss, so dodge,
+    // parry and block can't push it off the table (crushing blows still can).
+    const auto = fillTable(["miss", "crit", "dodge", "parry", "block", "crush"], ch);
     const avoidBlock = ch.miss + ch.dodge + ch.parry + ch.block;
     const needed = 100 - ch.crit;
     const critFree = ch.crit <= 0;
 
     const parts = (tb) => [
-      { name: "Miss", v: tb.miss, c: "var(--c-miss)" }, { name: "Dodge", v: tb.dodge, c: "var(--c-dodge)" },
-      { name: "Parry", v: tb.parry, c: "var(--c-parry)" }, { name: "Block", v: tb.block, c: "var(--c-block)" },
-      { name: "Crit", v: tb.crit, c: "var(--c-crit)" }, { name: "Crushing", v: tb.crush || 0, c: "var(--c-crush)" },
+      { name: "Miss", v: tb.miss, c: "var(--c-miss)" }, { name: "Crit", v: tb.crit, c: "var(--c-crit)" },
+      { name: "Dodge", v: tb.dodge, c: "var(--c-dodge)" }, { name: "Parry", v: tb.parry, c: "var(--c-parry)" },
+      { name: "Block", v: tb.block, c: "var(--c-block)" }, { name: "Crushing", v: tb.crush || 0, c: "var(--c-crush)" },
       { name: "Hit", v: tb.hit, c: "var(--c-hit)" },
     ];
     const critDefNeeded = mobSkill + 125;
-    let html = `<div class="rolltitle"><h3>Melee swings against you</h3><span class="note">auto attacks</span></div>`;
+    let html = `<div class="rolltitle"><h3>Melee swings against you</h3><span class="note">auto attacks · crit is only reduced by defense</span></div>`;
     html += `<div class="rollbar">${rollBar(parts(auto))}</div><div class="legend">${legend(parts(auto).filter((p) => p.v > 0.0001))}</div>`;
     $("d-tables").innerHTML = html;
 
