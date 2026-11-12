@@ -33,11 +33,11 @@
   }
 
   // ---------- SVG line chart ----------
-  function lineChart({ xs, series, xMax, yMax, marker, xLabel, yFmt, xTicks, yTicks, area = true }) {
+  function lineChart({ xs, series, xMax, yMax, marker, xLabel, yFmt, xTicks, yTicks, area = true, label = "Chart" }) {
     const W = 640, H = 240, L = 48, R = 12, T = 12, B = 30;
     const x = (v) => L + (v / xMax) * (W - L - R);
     const y = (v) => T + (1 - v / yMax) * (H - T - B);
-    let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">`;
+    let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}">`;
     yTicks.forEach((t) => {
       s += `<line class="grid-l" x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}"/>`;
       s += `<text class="axis-t" x="${L - 8}" y="${y(t) + 4}" text-anchor="end">${yFmt(t)}</text>`;
@@ -72,7 +72,8 @@
   // =====================================================
   // RESISTANCES  (Royalgiraffe's resistance guide)
   // =====================================================
-  // Placeholders until the real Vanilla+ boss resistances are known.
+  // Placeholders until the real Vanilla+ boss resistances are known. Not shown: add this list back in
+  // initResist() (next to "Classic raid bosses") once it holds real bosses.
   const PLACEHOLDER_BOSSES = [
     ["Placeholder boss A", { fire: 0 }],
     ["Placeholder boss B", { frost: 100 }],
@@ -205,12 +206,13 @@
       xs, series: [ys, yb], xMax, yMax: 80, marker: { x: res, y: st.avg * 100 },
       xTicks, yTicks: [0, 20, 40, 60, 80], yFmt: (t) => t + "%",
       xLabel: o.binary ? "dashed: non-binary spells" : "dashed: binary spells",
+      label: "Average mitigation by resistance",
     });
   }
 
   function initResist() {
     const sel = $("r-boss");
-    [["Vanilla+ bosses (placeholders)", PLACEHOLDER_BOSSES], ["Classic raid bosses", BOSSES]].forEach(([label, list]) => {
+    [["Classic raid bosses", BOSSES]].forEach(([label, list]) => {
       const group = document.createElement("optgroup");
       group.label = label;
       list.forEach(([name, r]) => {
@@ -262,7 +264,7 @@
   const armorDR = (armor, lvl) => clamp(armor / (armor + 400 + 85 * lvl), 0, 0.75);
 
   function renderArmor() {
-    const armor = num("a-armor"), lvl = num("a-lvl"), hp = num("a-hp");
+    const armor = clamp(num("a-armor"), 0, 200000), lvl = num("a-lvl"), hp = num("a-hp");  // more would freeze the chart
     const dr = armorDR(armor, lvl);
     const k = 400 + 85 * lvl;
     const capArmor = 3 * k;
@@ -283,7 +285,7 @@
     const xTicks = []; for (let t = 0; t <= xMax; t += 5000) xTicks.push(t);
     $("a-chart").innerHTML = lineChart({
       xs, series: [ys], xMax, yMax: 80, marker: { x: armor, y: dr * 100 },
-      xTicks, yTicks: [0, 20, 40, 60, 80], yFmt: (t) => t + "%",
+      xTicks, yTicks: [0, 20, 40, 60, 80], yFmt: (t) => t + "%", label: "Damage reduction by armor",
     });
   }
 
@@ -444,6 +446,7 @@
     $("g-chart").innerHTML = lineChart({
       xs, series: [a, b], xMax: 120, yMax, xTicks: [0, 20, 40, 60, 80, 100, 120],
       yTicks: [0, yMax / 4, yMax / 2, (3 * yMax) / 4, yMax], yFmt: (t) => fmt(t), xLabel: "seconds", area: true,
+      label: "Mana over a 2 minute fight: casting non-stop, and stopping 5 seconds out of every 20",
     });
     $("g-note").textContent = "Solid line: casting non-stop. Dashed: stopping for 5 seconds out of every 20.";
   }
@@ -535,7 +538,7 @@
 
     return {
       rank, level, mana, cast: castTime, base: baseAvg + hotTotal, bonus: bonus + (hasHot ? hotCoef * power : 0),
-      total, ps: total / castTime, pm: total / mana,
+      total, ps: total / castTime, pm: mana > 0 ? total / mana : 0,  // a free spell has no per-mana value
     };
   }
 
